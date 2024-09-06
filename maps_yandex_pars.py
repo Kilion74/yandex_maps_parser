@@ -1,15 +1,48 @@
 import bs4
 import time
-import csv
 import pyautogui
+import csv
+import random
 from selenium import webdriver  # pip install selenium
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager  # pip install webdriver-manager
 
+# Список пользовательских агентов
+user_agents = [
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Gecko/20100101 Firefox/113.0',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Gecko/20100101 Firefox/112.0',
+    'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1',
+    'Mozilla/5.0 (Linux; Android 11; SM-G998B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.77 Mobile Safari/537.36',
+    'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:78.0) Gecko/20100101 Firefox/78.0',
+    'Mozilla/5.0 (Linux; Android 10; SM-G960F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Mobile Safari/537.36',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36 OPR/76.0.4017.177',
+    'Mozilla/5.0 (Linux; Android 11; Pixel 4 XL Build/RQ3A.210705.001) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Mobile Safari/537.36',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Gecko/20100101 Firefox/86.0',
+    'Mozilla/5.0 (Linux; Android 5.1; Nexus 5 Build/LMY48B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Mobile Safari/537.36'
+]
+
+
+# Функция для получения случайного пользовательского агента
+def get_random_user_agent():
+    return random.choice(user_agents)
+
+
+# Настройка браузера
 chrome_options = webdriver.ChromeOptions()
-# chrome_options.add_argument(
-#     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36')
-# chrome_options.add_argument("--disable-blink-features=AutomationControlled")
+chrome_options.add_argument(f"user-agent={get_random_user_agent()}")
+chrome_options.add_argument("--disable-blink-features=AutomationControlled")
+chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+chrome_options.add_experimental_option("useAutomationExtension", False)
+
 print(
     'Введите категорию из списка: еда, кафе, продукты, салоны красоты, аптеки, гостиницы, азс, спорт, больницы, автосервисы')
 category = input().lower()
@@ -118,9 +151,8 @@ with webdriver.Chrome(service=Service(ChromeDriverManager().install()),
                     pisar.writerow(fields)  # Записываем заголовки, только если файл пуст
 
                     # Проверяем, что значение ключа 'name' не равно "Апрель"
-                if storage['name'] != 'Апрель':
-
-                    pisar.writerow(
-                        [storage['maps'], storage['city'], storage['value'], storage['name'], storage['reiting'],
-                         storage['adress'], storage['phone'], storage['url'], storage['site'],
-                         storage['social_1']])
+                # if storage['name'] != f'{head}':
+                pisar.writerow(
+                    [storage['maps'], storage['city'], storage['value'], storage['name'], storage['reiting'],
+                     storage['adress'], storage['phone'], storage['url'], storage['site'],
+                     storage['social_1']])

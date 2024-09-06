@@ -7,18 +7,18 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager  # pip install webdriver-manager
 
 chrome_options = webdriver.ChromeOptions()
-# chrome_options.add_argument(
-#     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36')
-# chrome_options.add_argument("--disable-blink-features=AutomationControlled")
+chrome_options.add_argument(
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36')
+chrome_options.add_argument("--disable-blink-features=AutomationControlled")
 
 with webdriver.Chrome(service=Service(ChromeDriverManager().install()),
                       options=chrome_options) as driver:  # Открываем хром
     driver.get(
-        "https://yandex.ru/maps/51/samara/search/%D0%A1%D0%B0%D0%BB%D0%BE%D0%BD%D1%8B%20%D0%BA%D1%80%D0%B0%D1%81%D0%BE%D1%82%D1%8B/?ll=50.181841%2C53.251307&sll=50.061318%2C53.322139&sspn=1.375249%2C0.458164&z=11.52")  # Открываем страницу
-    pyautogui.moveTo(260, 250, duration=0.25)
-    pyautogui.middleClick()
-    pyautogui.move(0, 200, duration=0.25)
-    time.sleep(25)  # Время на прогрузку страницы
+        "https://yandex.ru/maps/org/medsi/1236981588/?ll=37.324155%2C55.873561&z=17")  # Открываем страницу
+    # pyautogui.moveTo(260, 250, duration=0.25)
+    # pyautogui.middleClick()
+    # pyautogui.move(0, 200, duration=0.25)
+    # time.sleep(25)  # Время на прогрузку страницы
     soup = bs4.BeautifulSoup(driver.page_source, 'html.parser')
     heads = soup.find('ul', class_='search-list-view__list').find_all('li')
     print(len(heads))
